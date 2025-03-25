@@ -1,6 +1,6 @@
-import { db } from "@/utils/utilities.js";
+import { db } from "../../utils/utilities.js";
 
-export default async function PostsPage() {
+export default async function TestPage() {
 	const posts = (await db.query(`SELECT * FROM users`)).rows;
 
 	console.log(posts);
