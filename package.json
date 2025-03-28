@@ -11,7 +11,9 @@
   "dependencies": {
     "@clerk/nextjs": "^6.5.0",
     "@neondatabase/serverless": "^0.10.4",
+    "dotenv": "^16.4.7",
     "next": "15.1.6",
+    "openai": "^4.89.0",
     "pg": "^8.14.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
