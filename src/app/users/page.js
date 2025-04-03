@@ -1,6 +1,6 @@
 import { db } from "../../utils/utilities.js";
 import RadioButton from "@/components/radioButton.js";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 
 export default async function TestPage() {
 	const users = (await db.query(`SELECT * FROM users`)).rows;
@@ -10,9 +10,18 @@ export default async function TestPage() {
 	const { userId } = await auth();
 	console.log("The userId is ", userId);
 
-	// if (userId && !users.includes(userId)) {
-	// 	await db.query(`INSERT INTO users ()`);
-	// }
+	const { lastName, firstName, fullName, emailAddresses } = await currentUser();
+
+	console.log(emailAddresses[0].emailAddress);
+	console.log(lastName, firstName, fullName);
+
+	const clerkIds = users.map((user) => user.clerkId);
+
+	if (userId && !clerkIds.includes(userId)) {
+		await db.query(
+			`INSERT INTO users (clerkid, fullname) VALUES ('stupid', 'Mr Stupid')`
+		);
+	}
 
 	// console.log(posts);
 
