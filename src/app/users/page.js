@@ -15,11 +15,12 @@ export default async function TestPage() {
 	console.log(emailAddresses[0].emailAddress);
 	console.log(lastName, firstName, fullName);
 
-	const clerkIds = users.map((user) => user.clerkId);
+	const clerkIds = users.map((user) => user.clerkid);
+	console.log(clerkIds);
 
 	if (userId && !clerkIds.includes(userId)) {
 		await db.query(
-			`INSERT INTO users (clerkid, fullname) VALUES ('stupid', 'Mr Stupid')`
+			`INSERT INTO users (clerkid, fullname) VALUES ('${userId}', '${fullName}')`
 		);
 	}
 
