@@ -1,5 +1,15 @@
+"use client";
+
 export default function AiResponse({ data, myAnswer }) {
-	const [data, setData] = useState({});
+	function myGrade(mark) {
+		if (mark < 5) {
+			return "Little or no understanding";
+		} else if (mark < 8) {
+			return "Some understanding";
+		} else if (mark >= 8) {
+			return "Good understanding";
+		}
+	}
 
 	return (
 		<>
