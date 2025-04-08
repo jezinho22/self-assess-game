@@ -1,5 +1,11 @@
 import Image from "next/image";
+import UsingContext from "@/components/usingContext";
 
 export default async function Home() {
-	return <h1 className="text-3xl">Landing Page</h1>;
+	return (
+		<>
+			<p>Well here we go</p>
+			<UsingContext />
+		</>
+	);
 }
