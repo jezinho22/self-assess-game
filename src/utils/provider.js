@@ -12,13 +12,10 @@ export function LandingProvider({ children }) {
 	useEffect(() => {
 		setLandingMessage("Wowsers");
 	}, []);
-	const myArse = "Hairy";
 	console.log(landingMessage);
 	// we are returning our Provider so we can use this around our App, and giving values that we want the children to be able to access
 	return (
-		<LandingContext.Provider
-			value={{ myArse, landingMessage, setLandingMessage }}
-		>
+		<LandingContext.Provider value={{ landingMessage, setLandingMessage }}>
 			{children}
 		</LandingContext.Provider>
 	);
