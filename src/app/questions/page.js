@@ -2,10 +2,11 @@ import { db } from "../../utils/utilities.js";
 import RadioButton from "@/components/radioButton.js";
 
 export default async function QuestionPage() {
-	console.log("Wass gorn orn in trainun, Neeyul?");
+	// console.log("Wass gorn orn in trainun, Neeyul?");
 	// set up page to show questions with text boxes to input answers
 	// create link to openai api
 	const questions = (await db.query(`SELECT * FROM questions`)).rows;
+	console.log(questions);
 
 	async function handleSubmit(formData) {
 		"use server";
@@ -14,7 +15,7 @@ export default async function QuestionPage() {
 			console.log(pair[0], pair[1]);
 			answers[pair[0]] = pair[1];
 		}
-		// console.log(formData.get("question_" + question.id));
+		console.log(formData.get("question_" + question.id));
 
 		// const scent = formData.get("scent");
 		// const colour = formData.get("colour");
