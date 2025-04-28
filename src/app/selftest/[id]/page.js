@@ -39,6 +39,21 @@ export default async function SingleQuestionPage({ params }) {
 		//     'https://www.youtube.com/watch?v=vEROU2XtPR8',
 		//     'JavaScript Data Types Explained by freeCodeCamp')`);
 
+		// allow improving of marks if they already exist
+		if (question.points) {
+			await db.query(`UPDATE answers
+                            SET points = ${data.mark}
+                            WHERE question_id = ${question.id} AND clerkid = '${userId}'; `);
+		} else {
+			await db.query(`INSERT INTO answers (question_id, clerkid, answer, feedback, points, 
+                                                mdn_link, mdn_description, w3schools_link, 
+                                                w3schools_description,  youtube_link, youtube_description) 
+                            VALUES (${question.id},'${userId}','${answer}','${data.feedback}',
+                                                ${data.mark},'${data.mdn_link}','${data.mdn_description}',
+                                                '${data.w3schools_link}','${data.w3schools_description}',
+                                                '${data.youtube_link}','${data.youtube_description}')`);
+		}
+
 		await db.query(`INSERT INTO answers (question_id, clerkid, answer, feedback, points, mdn_link, mdn_description, w3schools_link, w3schools_description,  youtube_link, youtube_description) VALUES
 		    (${question.id},'${userId}','${answer}','${data.feedback}',${data.mark},'${data.mdn_link}','${data.mdn_description}','${data.w3schools_link}','${data.w3schools_description}','${data.youtube_link}','${data.youtube_description}')`);
 

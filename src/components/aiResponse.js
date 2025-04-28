@@ -1,5 +1,4 @@
 "use client";
-import { useEffect } from "react";
 
 export default function AiResponse({ data, myAnswer }) {
 	function myGrade(mark) {
