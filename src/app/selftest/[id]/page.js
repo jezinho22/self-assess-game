@@ -10,56 +10,73 @@ const client = new OpenAI();
 
 export default async function SingleQuestionPage({ params }) {
 	const slug = await params;
+	const { userId } = await auth();
 	// fetch question data from db
+	// const response = await db.query(
+	// 	`SELECT * FROM questions where id='${slug.id}'`
+	// );
+	console.log("slug id: ", slug.id);
+	console.log("userId:", userId);
+
 	const response = await db.query(
-		`SELECT * FROM questions where id='${slug.id}'`
+		`SELECT  questions.id, 
+            questions.question,
+	        level.level,
+	        answers.answer,
+	        answers.points,
+	        answers.mdn_description,
+	        answers.mdn_link,
+	        answers.w3schools_description,
+	        answers.w3schools_link,
+	        answers.youtube_description,
+	        answers.youtube_link
+	FROM questions JOIN answers
+	ON questions.id = answers.question_id
+	JOIN level
+	ON questions.level_id = level.id
+	WHERE answers.id='${slug.id}' AND answers.clerkid = '${userId}'`
 	);
+
+	// on answer form
+	// display previous answer
+	// write new record previous answer exists
+
+	// look at filtering to get highest scoring answer for each question
+	// then there would be a record of all answers
+	// and no need to update
+	// watch out for empty fields
+
 	const question = response.rows[0];
-	console.log(question.question);
+
+	console.log("Question: ", question);
 
 	// working out how to store ai response which uses state to prompt a render
 	// but needs server action
 	async function handleAnswer(data, answer) {
 		"use server";
-		console.log("answer: ", answer);
 
 		const { userId } = await auth();
 		console.log("The userId is ", userId);
 		console.log("About to insert to db");
-		// await db.query(`INSERT INTO answers (question_id, clerkid, answer, feedback, points, mdn_link, mdn_description, w3schools_link, w3schools_description,  youtube_link, youtube_description) VALUES
-		//     ( 11,
-		//     'user_2vACEKNkmwmYXlqdO0RLp6JKzDW',
-		//     'rr',
-		//     'Great job! You correctly identified different types of variables in programming: array, string, object, number, and boolean. Listing more than the required three examples shows a good understanding. However, remember that *array* is a special type of object in JavaScript, so the main primitive types are number, string, and boolean. Your response demonstrates strong comprehension, though a brief mention of what each represents could further enhance it.',
-		//     9,
-		//     'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures',
-		//     'MDN Web Docs: JavaScript Data Types and Data Structures',
-		//     'https://www.w3schools.com/js/js_datatypes.asp',
-		//     'W3Schools: JavaScript Data Types',
-		//     'https://www.youtube.com/watch?v=vEROU2XtPR8',
-		//     'JavaScript Data Types Explained by freeCodeCamp')`);
+		console.log("Points: ", question);
 
 		// allow improving of marks if they already exist
 		if (question.points) {
-			await db.query(`UPDATE answers
-                            SET points = ${data.mark}
-                            WHERE question_id = ${question.id} AND clerkid = '${userId}'; `);
-		} else {
-			await db.query(`INSERT INTO answers (question_id, clerkid, answer, feedback, points, 
-                                                mdn_link, mdn_description, w3schools_link, 
-                                                w3schools_description,  youtube_link, youtube_description) 
+			console.log(question.id);
+			// if marks already awarded, update with new response
+			// if no marks yet, create new record
+			await db.query(`INSERT INTO answers (question_id, clerkid, answer, feedback, points,
+                                                mdn_link, mdn_description, w3schools_link,
+                                                w3schools_description,  youtube_link, youtube_description)
                             VALUES (${question.id},'${userId}','${answer}','${data.feedback}',
                                                 ${data.mark},'${data.mdn_link}','${data.mdn_description}',
                                                 '${data.w3schools_link}','${data.w3schools_description}',
                                                 '${data.youtube_link}','${data.youtube_description}')`);
+
+			console.log(
+				`(${question.id},'${userId}','${answer}','${data.feedback}',${data.mark},'${data.mdn_link}','${data.mdn_description}','${data.w3schools_link}','${data.w3schools_description}','${data.youtube_link}','${data.youtube_description}')`
+			);
 		}
-
-		await db.query(`INSERT INTO answers (question_id, clerkid, answer, feedback, points, mdn_link, mdn_description, w3schools_link, w3schools_description,  youtube_link, youtube_description) VALUES
-		    (${question.id},'${userId}','${answer}','${data.feedback}',${data.mark},'${data.mdn_link}','${data.mdn_description}','${data.w3schools_link}','${data.w3schools_description}','${data.youtube_link}','${data.youtube_description}')`);
-
-		console.log(
-			`(${question.id},'${userId}','${answer}','${data.feedback}',${data.mark},'${data.mdn_link}','${data.mdn_description}','${data.w3schools_link}','${data.w3schools_description}','${data.youtube_link}','${data.youtube_description}')`
-		);
 	}
 	// passed down to client component
 	// but brings answer back here
@@ -106,7 +123,7 @@ export default async function SingleQuestionPage({ params }) {
 		// console.log(data);
 
 		const data = {
-			mark: 9,
+			mark: 5,
 			feedback: `Great job! You correctly identified different types of variables in programming: array, string, object, number, and boolean. Listing more than the required three examples shows a good understanding. However, remember that "array" is a special type of object in JavaScript, so the main primitive types are number, string, and boolean. Your response demonstrates strong comprehension, though a brief mention of what each represents could further enhance it.`,
 			mdn_link:
 				"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures",
@@ -125,7 +142,10 @@ export default async function SingleQuestionPage({ params }) {
 	return (
 		<div>
 			<h1 className="text-2xl">Success criterion: {question.question}</h1>
-			<AnswerForm getFeedbackFromAi={getFeedbackFromAi} />
+			<AnswerForm
+				getFeedbackFromAi={getFeedbackFromAi}
+				previousAnswer={question}
+			/>
 		</div>
 	);
 }
