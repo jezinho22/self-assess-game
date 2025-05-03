@@ -5,8 +5,8 @@ import { zodResponseFormat } from "openai/helpers/zod";
 
 import { useState } from "react";
 
-export default function AnswerForm({ getFeedbackFromAi, previousAnswer }) {
-	const [data, setData] = useState(previousAnswer);
+export default function AnswerForm({ getFeedbackFromAi }) {
+	const [data, setData] = useState({});
 	const [answer, setAnswer] = useState();
 
 	async function getTested(formData) {

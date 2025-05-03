@@ -6,7 +6,6 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 
 export default async function Home() {
 	const { userId } = await auth();
-	console.log("userid: ", userId);
 
 	const response = await db.query(`SELECT 
 		users.username, 
@@ -19,15 +18,13 @@ export default async function Home() {
 
 	return (
 		<>
-			{userId && (
-				<>
-					<p>Well here we go</p>
-					<SparkBar score={score.total_score} />
-					<UsingContext />
-					<div>Username: {score.username}</div>
-					<div>My score: {score.total_score}</div>
-				</>
-			)}
+			<p>Well here we go</p>
+			<SparkBar score={score.total_score} />
+
+			<UsingContext />
+
+			<div>Username: {score.username}</div>
+			<div>My score: {score.total_score}</div>
 		</>
 	);
 }
