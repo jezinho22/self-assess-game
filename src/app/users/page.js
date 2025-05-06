@@ -4,7 +4,6 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 
 export default async function TestPage() {
 	const users = (await db.query(`SELECT * FROM users`)).rows;
-	console.log(users);
 
 	// checking user in db
 	const { userId } = await auth();
@@ -16,7 +15,6 @@ export default async function TestPage() {
 	console.log(lastName, firstName, fullName);
 
 	const clerkIds = users.map((user) => user.clerkid);
-	console.log(clerkIds);
 
 	if (userId && !clerkIds.includes(userId)) {
 		await db.query(

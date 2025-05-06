@@ -8,7 +8,7 @@ export default function NavBar() {
 			<Link className="p-5" href={"/"}>
 				Home
 			</Link>
-			<Link className="p-5" href={"/ai"}>
+			<Link className="p-5" href={"/choose_question"}>
 				Test yourself
 			</Link>
 			<Link className="p-5" href={"/questions"}>

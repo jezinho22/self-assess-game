@@ -23,3 +23,44 @@ body {
 .woohoo {
 	border-radius: 5px;
 }
+
+.gold {
+	background: radial-gradient(
+			ellipse farthest-corner at right bottom,
+			#fedb37 0%,
+			#fdb931 8%,
+			#9f7928 30%,
+			#8a6e2f 40%,
+			transparent 80%
+		),
+		radial-gradient(
+			ellipse farthest-corner at left top,
+			#ffffff 0%,
+			#ffffac 8%,
+			#d1b464 25%,
+			#5d4a1f 62.5%,
+			#5d4a1f 100%
+		);
+}
+
+.bronze {
+	background: linear-gradient(135deg, #d19c35 0%, #f7e6c5 50%, #e8b558 100%);
+	border: 1px solid #e6b86a;
+	color: #8a6e2f;
+}
+
+.silver {
+	background: linear-gradient(
+		45deg,
+		rgba(181, 181, 181, 1) 0%,
+		rgba(252, 252, 252, 1) 56%,
+		rgba(232, 232, 232, 1) 96%
+	);
+	border: 1px solid rgba(181, 181, 181, 1);
+	color: slategray;
+}
+.gold {
+	background: linear-gradient(45deg, #fedb37 0%, #ffffac 56%, #d1b464 96%);
+	border: 1px solid rgba(242, 215, 12, 1);
+	color: #9f7928;
+}

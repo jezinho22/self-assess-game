@@ -11,19 +11,22 @@ const client = new OpenAI();
 export default async function SingleQuestionPage({ params }) {
 	const slug = await params;
 	const { userId } = await auth();
-	// fetch question data from db
-	// const response = await db.query(
-	// 	`SELECT * FROM questions where id='${slug.id}'`
-	// );
-	console.log("slug id: ", slug.id);
-	console.log("userId:", userId);
 
-	const response = await db.query(
+	const question_data = await db.query(
+		`SELECT questions.id, questions.question, level.level 
+		FROM questions JOIN level
+		ON questions.level_id = level.id
+		WHERE questions.id=${slug.id}`
+	);
+	const question = question_data.rows[0];
+
+	const previous_answer_data = await db.query(
 		`SELECT  questions.id, 
             questions.question,
 	        level.level,
 	        answers.answer,
 	        answers.points,
+			answers.feedback,
 	        answers.mdn_description,
 	        answers.mdn_link,
 	        answers.w3schools_description,
@@ -34,7 +37,7 @@ export default async function SingleQuestionPage({ params }) {
 	ON questions.id = answers.question_id
 	JOIN level
 	ON questions.level_id = level.id
-	WHERE answers.id='${slug.id}' AND answers.clerkid = '${userId}'`
+	WHERE questions.id='${slug.id}' AND answers.clerkid = '${userId}'`
 	);
 
 	// on answer form
@@ -46,37 +49,28 @@ export default async function SingleQuestionPage({ params }) {
 	// and no need to update
 	// watch out for empty fields
 
-	const question = response.rows[0];
-
-	console.log("Question: ", question);
+	const previousAnswer = previous_answer_data.rows[0];
 
 	// working out how to store ai response which uses state to prompt a render
 	// but needs server action
 	async function handleAnswer(data, answer) {
 		"use server";
 
+		console.log("Handling answer & data: ", question);
+
 		const { userId } = await auth();
-		console.log("The userId is ", userId);
-		console.log("About to insert to db");
-		console.log("Points: ", question);
-
+		console.log("Saving to record of ", userId);
 		// allow improving of marks if they already exist
-		if (question.points) {
-			// if marks already awarded, update with new response
-			// if no marks yet, create new record
-			await db.query(`INSERT INTO answers (question_id, clerkid, answer, feedback, points,
-                                                mdn_link, mdn_description, w3schools_link,
-                                                w3schools_description,  youtube_link, youtube_description)
-                            VALUES (${question.id},'${userId}','${answer}','${data.feedback}',
-                                                ${data.mark},'${data.mdn_link}','${data.mdn_description}',
-                                                '${data.w3schools_link}','${data.w3schools_description}',
-                                                '${data.youtube_link}','${data.youtube_description}')`);
 
-			// console.log(
-			// 	`(${question.id},'${userId}','${answer}','${data.feedback}',${data.mark},'${data.mdn_link}','${data.mdn_description}','${data.w3schools_link}','${data.w3schools_description}','${data.youtube_link}','${data.youtube_description}')`
-			// );
-		}
+		await db.query(`INSERT INTO answers (question_id, clerkid, answer, feedback, points,
+											mdn_link, mdn_description, w3schools_link,
+											w3schools_description,  youtube_link, youtube_description)
+						VALUES (${question.id},'${userId}','${answer}','${data.feedback}',
+											${data.mark},'${data.mdn_link}','${data.mdn_description}',
+											'${data.w3schools_link}','${data.w3schools_description}',
+											'${data.youtube_link}','${data.youtube_description}')`);
 	}
+
 	// passed down to client component
 	// but brings answer back here
 	async function getFeedbackFromAi(answer) {
@@ -133,7 +127,8 @@ export default async function SingleQuestionPage({ params }) {
 			youtube_link: "https://www.youtube.com/watch?v=vEROU2XtPR8",
 			youtube_description: "JavaScript Data Types Explained by freeCodeCamp",
 		};
-		// console.log("answer:", answer);
+		//
+
 		handleAnswer(data, answer);
 		return data;
 	}
@@ -141,9 +136,10 @@ export default async function SingleQuestionPage({ params }) {
 	return (
 		<div>
 			<h1 className="text-2xl">Success criterion: {question.question}</h1>
+			<h2 className="text-xl">Level: {question.level}</h2>
 			<AnswerForm
 				getFeedbackFromAi={getFeedbackFromAi}
-				previousAnswer={question}
+				previousAnswer={previousAnswer}
 			/>
 		</div>
 	);
