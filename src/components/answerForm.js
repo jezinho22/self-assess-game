@@ -1,7 +1,5 @@
 "use client";
 import AiResponse from "./aiResponse";
-import { z } from "zod";
-import { zodResponseFormat } from "openai/helpers/zod";
 
 import { useState } from "react";
 
@@ -10,8 +8,8 @@ export default function AnswerForm({ getFeedbackFromAi, previousAnswer }) {
 	const [answer, setAnswer] = useState();
 
 	async function getTested(formData) {
-		const myAnswer = await formData.get("answer");
-		setData(await getFeedbackFromAi(myAnswer));
+		const newAnswer = await formData.get("answer");
+		setData(await getFeedbackFromAi(newAnswer));
 	}
 
 	return (
@@ -26,7 +24,7 @@ export default function AnswerForm({ getFeedbackFromAi, previousAnswer }) {
 				<input type="text" name="answer" placeholder="Your answer" />
 				<button type="submit">Submit</button>
 			</form>
-			{data && <AiResponse data={data} myAnswer={answer} />}
+			{data && <AiResponse data={data} myAnswer={data.answer} />}
 		</>
 	);
 }

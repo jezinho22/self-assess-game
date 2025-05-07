@@ -1,4 +1,6 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
+import { z } from "zod";
+import { zodResponseFormat } from "openai/helpers/zod";
 
 import AnswerForm from "@/components/answerForm";
 import QuestionList from "@/components/QuestionList";
@@ -66,7 +68,7 @@ export default async function SingleQuestionPage({ params }) {
 											mdn_link, mdn_description, w3schools_link,
 											w3schools_description,  youtube_link, youtube_description)
 						VALUES (${question.id},'${userId}','${answer}','${data.feedback}',
-											${data.mark},'${data.mdn_link}','${data.mdn_description}',
+											'${data.mark}','${data.mdn_link}','${data.mdn_description}',
 											'${data.w3schools_link}','${data.w3schools_description}',
 											'${data.youtube_link}','${data.youtube_description}')`);
 	}
@@ -115,7 +117,12 @@ export default async function SingleQuestionPage({ params }) {
 
 		// console.log(data);
 
+		// add answer to ai response
+		// get page to redirect with answer and feedback on submit
+		// plus inidcation of whether this is better than previous answer
+
 		const data = {
+			myAnswer: answer,
 			mark: 5,
 			feedback: `Great job! You correctly identified different types of variables in programming: array, string, object, number, and boolean. Listing more than the required three examples shows a good understanding. However, remember that "array" is a special type of object in JavaScript, so the main primitive types are number, string, and boolean. Your response demonstrates strong comprehension, though a brief mention of what each represents could further enhance it.`,
 			mdn_link:

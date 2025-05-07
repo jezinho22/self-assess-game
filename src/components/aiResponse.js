@@ -1,12 +1,12 @@
 "use client";
 
 export default function AiResponse({ data, myAnswer }) {
-	function myGrade(mark) {
-		if (mark < 5) {
+	function myGrade(points) {
+		if (points < 5) {
 			return "Little or no understanding";
-		} else if (mark < 8) {
+		} else if (points < 8) {
 			return "Some understanding";
-		} else if (mark >= 8) {
+		} else if (points >= 8) {
 			return "Good understanding";
 		}
 	}
@@ -15,7 +15,7 @@ export default function AiResponse({ data, myAnswer }) {
 		<>
 			<h3>My answer: {myAnswer}</h3>
 			<p>Grade: {myGrade(data.points) ? myGrade(data.points) : ""}</p>
-			<p>Mark: {data.mark} out of 10</p>
+			<p>Marks: {data.points} out of 10</p>
 			<p>Feedback: {data.feedback}</p>
 			<h3 className="text-xl text-[#3f1046]">Useful links:</h3>
 			<ul>
