@@ -5,12 +5,11 @@ export default function SparkBar({ score }) {
 	const [width, setWidth] = useState(0);
 
 	useEffect(() => {
-		console.log("Effect runnning...");
 		let x = 0;
 		const timer = setInterval(() => {
 			// I can set the value of width here
 			// but I cannot access the new value!
-			if (x < score) {
+			if (x < score.total_score) {
 				x++;
 				setWidth(x);
 			} else {
@@ -26,6 +25,7 @@ export default function SparkBar({ score }) {
 	return (
 		<div className="max-w-[200px]">
 			{/* tailwind needs a lot of extra set up to do dynamic width */}
+			<p>User: {score.username}</p>
 			<div
 				style={{
 					background: "#0FFF50",

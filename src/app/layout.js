@@ -7,7 +7,6 @@ import {
 	UserButton,
 } from "@clerk/nextjs";
 import NavBar from "@/components/NavBar";
-import ProgressBar from "@/components/ProgressBar";
 
 import { LandingProvider } from "@/utils/provider";
 
