@@ -52,6 +52,7 @@ export default async function SingleQuestionPage({ params }) {
 	// watch out for empty fields
 
 	const previousAnswer = previous_answer_data.rows[0];
+	console.log("Previous answer: ", previousAnswer);
 
 	// working out how to store ai response which uses state to prompt a render
 	// but needs server action
