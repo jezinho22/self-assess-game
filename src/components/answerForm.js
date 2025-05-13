@@ -7,11 +7,13 @@ export default function AnswerForm({ getFeedbackFromAi, previousAnswer }) {
 	const [data, setData] = useState({});
 	const [answer, setAnswer] = useState();
 
-	console.log("Previous answer @ answerform: ", previousAnswer);
+	// console.log("Previous answer @ answerform: ", previousAnswer);
 
 	async function getTested(formData) {
+		console.log("Get tested!!!!!!");
 		const newAnswer = await formData.get("answer");
 		setData(await getFeedbackFromAi(newAnswer));
+		console.log(data);
 	}
 
 	return (
@@ -31,7 +33,8 @@ export default function AnswerForm({ getFeedbackFromAi, previousAnswer }) {
 				<input type="text" name="answer" placeholder="Your answer" />
 				<button type="submit">Submit</button>
 			</form>
-			{data.answer && <AiResponse data={data} myAnswer={data.answer} />}
+			{data.myAnswer && console.log("Data received: ", data)}
+			{/* {data.myAnswer && <AiResponse data={data} myAnswer={data.myAnswer} />} */}
 		</>
 	);
 }

@@ -7,14 +7,24 @@ import { ClerkProvider, SignedIn } from "@clerk/nextjs";
 
 export default async function Home() {
 	const { userId } = await auth();
-	const response = await db.query(`SELECT 
-		users.username, SUM(answers.points) AS total_score
-		FROM answers 
-		JOIN users ON answers.clerkid = users.clerkid
-		WHERE users.clerkid = '${userId}'
-		GROUP BY users.username;`);
-	const score = response.rows[0];
-	console.log("Score: ", score);
+
+	const response =
+		await db.query(`SELECT u.username, SUM(best_answers.points) AS total_score, l.level
+		FROM users u
+		JOIN (
+			SELECT a.clerkid, a.question_id, MAX(a.points) AS points
+			FROM answers a
+			WHERE a.clerkid = 'user_2vACEKNkmwmYXlqdO0RLp6JKzDW'
+			GROUP BY a.clerkid, a.question_id
+		) AS best_answers ON u.clerkid = best_answers.clerkid
+		JOIN questions q ON best_answers.question_id = q.id
+		JOIN level l ON q.level_id = l.id
+		GROUP BY u.username, l.level`);
+	const score = response.rows;
+	const totalScore = score.reduce((agg, curr) => {
+		return { total_score: Number(agg.total_score) + Number(curr.total_score) };
+	});
+	console.log("Score: ", totalScore.total_score);
 
 	return (
 		<>

@@ -42,6 +42,9 @@ export default async function SingleQuestionPage({ params }) {
 	WHERE questions.id='${slug.id}' AND answers.clerkid = '${userId}'`
 	);
 
+	const previousAnswer = previous_answer_data.rows[0];
+	// console.log("Previous answer: ", previousAnswer);
+
 	// on answer form
 	// display previous answer
 	// write new record previous answer exists
@@ -51,18 +54,17 @@ export default async function SingleQuestionPage({ params }) {
 	// and no need to update
 	// watch out for empty fields
 
-	const previousAnswer = previous_answer_data.rows[0];
-	console.log("Previous answer: ", previousAnswer);
-
 	// working out how to store ai response which uses state to prompt a render
 	// but needs server action
 	async function handleAnswer(data, answer) {
 		"use server";
 
 		console.log("Handling answer & data: ", question);
+		console.log("Handling answer & data: ", data);
 
 		const { userId } = await auth();
-		console.log("Saving to record of ", userId);
+
+		// console.log("Saving to record of ", userId);
 		// allow improving of marks if they already exist
 
 		await db.query(`INSERT INTO answers (question_id, clerkid, answer, feedback, points,
@@ -124,7 +126,7 @@ export default async function SingleQuestionPage({ params }) {
 
 		const data = {
 			myAnswer: answer,
-			mark: 5,
+			mark: 8,
 			feedback: `Great job! You correctly identified different types of variables in programming: array, string, object, number, and boolean. Listing more than the required three examples shows a good understanding. However, remember that "array" is a special type of object in JavaScript, so the main primitive types are number, string, and boolean. Your response demonstrates strong comprehension, though a brief mention of what each represents could further enhance it.`,
 			mdn_link:
 				"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures",
@@ -136,10 +138,12 @@ export default async function SingleQuestionPage({ params }) {
 			youtube_description: "JavaScript Data Types Explained by freeCodeCamp",
 		};
 		//
-
+		// console.log("AI response: ", data);
 		handleAnswer(data, answer);
 		return data;
 	}
+
+	// align data coming from database with data coming from ai eg marks vs points
 
 	return (
 		<div>

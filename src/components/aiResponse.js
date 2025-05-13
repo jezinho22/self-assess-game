@@ -14,8 +14,8 @@ export default function AiResponse({ data, myAnswer }) {
 	return (
 		<>
 			<h3>My answer: {myAnswer}</h3>
-			<p>Grade: {myGrade(data.points) ? myGrade(data.points) : ""}</p>
-			<p>Marks: {data.points} out of 10</p>
+			<p>Grade: {myGrade(data.mark) ? myGrade(data.mark) : ""}</p>
+			<p>Marks: {data.mark} out of 10</p>
 			<p>Feedback: {data.feedback}</p>
 			<h3 className="text-xl text-[#3f1046]">Useful links:</h3>
 			<ul>
