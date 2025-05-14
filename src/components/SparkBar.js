@@ -20,12 +20,12 @@ export default function SparkBar({ score }) {
 		return () => {
 			clearInterval(timer);
 		};
-	}, []);
+	}, [score]);
 
 	return (
 		<div className="max-w-[200px]">
-			{/* tailwind needs a lot of extra set up to do dynamic width */}
 			<p>User: {score.username}</p>
+			{/* tailwind needs a lot of extra set up to do dynamic width */}
 			<div
 				style={{
 					background: "#0FFF50",
