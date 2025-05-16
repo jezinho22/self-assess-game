@@ -10,7 +10,7 @@ Plus adding in new learning from using llm via api
 ## Current status
 
 Very messy UIs resulting from experiments
-Main pages are landing page which can show a score bar, self assess which provides criteria to choose, and dynamic question pages which allow inputting responses to criteria and give feedback from ai, including points/marks and resources to study
+Main working pages are _landing page_ which can show a score bar, _Test yourself_ which provides criteria to choose, and _dynamic question pages_ which allow inputting responses to criteria and give feedback from ai, including points/marks and resources to study
 
 ## db table definitions
 
