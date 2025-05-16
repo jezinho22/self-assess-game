@@ -1,3 +1,17 @@
+# Developing self assessment processes
+
+Making statements more measurable
+Providing instant feedback and support
+Gamifying learning
+
+As yet unnamed and experimental project to review and extend my learning in NextJS.
+Plus adding in new learning from using llm via api
+
+## Current status
+
+Very messy UIs resulting from experiments
+Main pages are landing page which can show a score bar, self assess which provides criteria to choose, and dynamic question pages which allow inputting responses to criteria and give feedback from ai, including points/marks and resources to study
+
 ## db table definitions
 
 create table public.answers (
