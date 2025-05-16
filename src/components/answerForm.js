@@ -34,7 +34,7 @@ export default function AnswerForm({ getFeedbackFromAi, previousAnswer }) {
 				<button type="submit">Submit</button>
 			</form>
 			{data.myAnswer && console.log("Data received: ", data)}
-			{/* {data.myAnswer && <AiResponse data={data} myAnswer={data.myAnswer} />} */}
+			{data.myAnswer && <AiResponse data={data} myAnswer={data.myAnswer} />}
 		</>
 	);
 }

@@ -27,7 +27,7 @@ export default async function SingleQuestionPage({ params }) {
             questions.question,
 	        level.level,
 	        answers.answer,
-	        answers.points,
+	        answers.mark,
 			answers.feedback,
 	        answers.mdn_description,
 	        answers.mdn_link,
@@ -67,7 +67,7 @@ export default async function SingleQuestionPage({ params }) {
 		// console.log("Saving to record of ", userId);
 		// allow improving of marks if they already exist
 
-		await db.query(`INSERT INTO answers (question_id, clerkid, answer, feedback, points,
+		await db.query(`INSERT INTO answers (question_id, clerkid, answer, feedback, mark,
 											mdn_link, mdn_description, w3schools_link,
 											w3schools_description,  youtube_link, youtube_description)
 						VALUES (${question.id},'${userId}','${answer}','${data.feedback}',

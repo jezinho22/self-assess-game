@@ -8,6 +8,8 @@ export default function AiResponse({ data, myAnswer }) {
 			return "Some understanding";
 		} else if (points >= 8) {
 			return "Good understanding";
+		} else {
+			return "Error: Data not passed";
 		}
 	}
 
